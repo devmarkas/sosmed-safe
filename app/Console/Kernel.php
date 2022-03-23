@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Models\Schedule as Scheduletb;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +16,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $data = Scheduletb::with(['user'])->get();
+        foreach ($data->pluck('start_time') as $key => $value) {
+            $schedule->call(function () {
+            })->dailyAt($value);
+        }
+        foreach ($data->pluck('end_time') as $key => $value) {
+            $schedule->call(function () {
+            })->dailyAt($value);
+        }
     }
 
     /**
@@ -25,7 +34,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
