@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\NotifsendController;
 use App\Http\Controllers\API\ProfileController;
 use App\Http\Controllers\API\ScheduleController;
 
@@ -48,3 +49,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // API route for logout user
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::get('send-notif-start', [NotifsendController::class, 'sendnotifstart'])->name('send.notif.start');
+Route::get('send-notif-end', [NotifsendController::class, 'sendnotifend'])->name('send.notif.end');

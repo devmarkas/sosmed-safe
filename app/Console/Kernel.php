@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\Api\NotifsendController;
 use App\Models\Schedule as Scheduletb;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -17,12 +18,18 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $data = Scheduletb::with(['user'])->get();
-        foreach ($data->pluck('start_time') as $key => $value) {
+        $datas = Scheduletb::with(['user'])->distinct()->pluck('start_time');
+        $datae = Scheduletb::with(['user'])->distinct()->pluck('end_time');
+        foreach ($datas as $key => $value) {
             $schedule->call(function () {
+                logger('start_time');
+                NotifsendController::sendnotifstart();
             })->dailyAt($value);
         }
-        foreach ($data->pluck('end_time') as $key => $value) {
+        foreach ($datae as $key => $value) {
             $schedule->call(function () {
+                logger('end_time');
+                NotifsendController::sendnotifend();
             })->dailyAt($value);
         }
     }
