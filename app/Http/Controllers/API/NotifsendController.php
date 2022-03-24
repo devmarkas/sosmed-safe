@@ -16,11 +16,12 @@ class NotifsendController extends Controller
             ->where('start_time', Carbon::now()->isoFormat('HH:mm'))
             ->get();
 
-        foreach ($data as $key => $value) {
+            foreach ($data as $key => $value) {
             # code...
 
 
-            $SERVER_API_KEY = env('FCM_SERVER_KEY');
+            // $SERVER_API_KEY = env('FCM_SERVER_KEY');
+            $SERVER_API_KEY = "AAAA1EmfY8M:APA91bHVoS-DFrLj2jfSvjVquXzr_hbGrOosZm3HeNne4FW5fbMTp-DbJi-ymxKPizq4pVQOo-6Z4plS-a3pDTJuKW1YEBnwPNgKFQYZNKUk_iNKJ0aLGhUMtPi3Cr_8TVLRTjPZZZpx";
 
             $data = [
                 "to" => $value->user->fcm_token,
@@ -67,7 +68,9 @@ class NotifsendController extends Controller
             # code...
 
 
-            $SERVER_API_KEY = env('FCM_SERVER_KEY');
+            // $SERVER_API_KEY = env('FCM_SERVER_KEY');
+            $SERVER_API_KEY = "AAAA1EmfY8M:APA91bHVoS-DFrLj2jfSvjVquXzr_hbGrOosZm3HeNne4FW5fbMTp-DbJi-ymxKPizq4pVQOo-6Z4plS-a3pDTJuKW1YEBnwPNgKFQYZNKUk_iNKJ0aLGhUMtPi3Cr_8TVLRTjPZZZpx";
+
 
             $data = [
                 "to" => $value->user->fcm_token,
