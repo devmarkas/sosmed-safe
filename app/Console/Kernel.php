@@ -22,13 +22,13 @@ class Kernel extends ConsoleKernel
         $datae = Scheduletb::with(['user'])->distinct()->pluck('end_time');
         foreach ($datas as $key => $value) {
             $schedule->call(function () {
-                // logger('start_time');
+                logger('start_time');
                 NotifsendController::sendnotifstart();
             })->dailyAt($value);
         }
         foreach ($datae as $key => $value) {
             $schedule->call(function () {
-                // logger('end_time');
+                logger('end_time');
                 NotifsendController::sendnotifend();
             })->dailyAt($value);
         }
