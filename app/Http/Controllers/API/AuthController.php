@@ -41,11 +41,11 @@ class AuthController extends Controller
                 $cek_token =  User::where('fcm_token', $request->input('fcm_token'))->first();
 
                 if ($cek_token) {
-                    User::where('id', $cek_token->id)->update('fcm_token', NULL);
+                    User::where('id', $cek_token->id)->update(['fcm_token'=> NULL]);
 
-                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                    User::where('id', $user->id)->update(['fcm_token'=> $request->input('fcm_token')]);
                 } else {
-                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                    User::where('id', $user->id)->update(['fcm_token'=> $request->input('fcm_token')]);
                 }
             }
 
@@ -94,11 +94,11 @@ class AuthController extends Controller
                 $cek_token =  User::where('fcm_token', $request->input('fcm_token'))->first();
 
                 if ($cek_token) {
-                    User::where('id', $cek_token->id)->update('fcm_token', NULL);
+                    User::where('id', $cek_token->id)->update(['fcm_token'=> NULL]);
 
-                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                    User::where('id', $user->id)->update(['fcm_token'=> $request->input('fcm_token')]);
                 } else {
-                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                    User::where('id', $user->id)->update(['fcm_token'=> $request->input('fcm_token')]);
                 }
             }
 
