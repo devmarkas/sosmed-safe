@@ -13,7 +13,7 @@ class NotifsendController extends Controller
     public function sendnotifstart()
     {
         $data = Schedule::with(['user'])->where('is_active', 1)
-            // ->where('start_time', Carbon::now()->isoFormat('HH:mm'))
+            ->where('start_time', Carbon::now()->isoFormat('HH:mm'))
             ->get();
 
         foreach ($data as $key => $value) {
@@ -58,7 +58,7 @@ class NotifsendController extends Controller
     public function sendnotifend()
     {
         $data = Schedule::with(['user'])->where('is_active', 1)
-            // ->where('end_time', Carbon::now()->isoFormat('HH:mm'))
+            ->where('end_time', Carbon::now()->isoFormat('HH:mm'))
             ->get();
         // dd($data);
         // dd(Carbon::now()->isoFormat('HH:mm') == Carbon::now()->isoFormat('HH:mm'));
