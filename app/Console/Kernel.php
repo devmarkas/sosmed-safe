@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Http\Controllers\Api\NotifsendController;
+use App\Http\Controllers\API\NotifsendController;
 use App\Models\Schedule as Scheduletb;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
