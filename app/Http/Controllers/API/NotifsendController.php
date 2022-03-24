@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 
 class NotifsendController extends Controller
 {
-    public function sendnotifstart()
+    public static function sendnotifstart()
     {
         $data = Schedule::with(['user'])->where('is_active', 1)
             ->where('start_time', Carbon::now()->isoFormat('HH:mm'))
@@ -55,7 +55,7 @@ class NotifsendController extends Controller
             dd($response);
         }
     }
-    public function sendnotifend()
+    public static function sendnotifend()
     {
         $data = Schedule::with(['user'])->where('is_active', 1)
             ->where('end_time', Carbon::now()->isoFormat('HH:mm'))
