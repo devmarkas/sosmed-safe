@@ -15,28 +15,39 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        try
-        {
-            $validator = Validator::make($request->all(),
-            [
-                'name'      => 'required|string|max:255',
-                'email'     => 'required|string|email|max:255|unique:users',
-                'password'  => 'required|string|min:8'
-            ]);
+        try {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'name'      => 'required|string|max:255',
+                    'email'     => 'required|string|email|max:255|unique:users',
+                    'password'  => 'required|string|min:8'
+                ]
+            );
 
-            if($validator->fails())
-            {
-                return response()->json($validator->errors());       
+            if ($validator->fails()) {
+                return response()->json($validator->errors());
             }
 
             $user = User::create(
                 [
                     'name' => $request->name,
                     'email' => $request->email,
-                    'fcm_token' => $request->token,
                     'password' => Hash::make($request->password)
                 ]
             );
+
+            if ($request->input('fcm_token')) {
+                $cek_token =  User::where('fcm_token', $request->input('fcm_token'))->first();
+
+                if ($cek_token) {
+                    User::where('id', $cek_token->id)->update('fcm_token', NULL);
+
+                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                } else {
+                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                }
+            }
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -45,66 +56,74 @@ class AuthController extends Controller
                     [
                         'message' => 'Selamat ' . $user->name . ' berhasil register',
                         'data' => $user,
-                        'access_token' => $token, 
-                        'token_type' => 'Bearer', 
+                        'access_token' => $token,
+                        'token_type' => 'Bearer',
                     ],
-                200);
-
-        }
-
-        catch (\Exception $error)
-        {
+                    200
+                );
+        } catch (\Exception $error) {
             return response()
-            ->json(
-                [
-                    'message'   => 'Err',
-                    'errors'    => $error->getMessage(),
-                ],
-            500);
-        }   
+                ->json(
+                    [
+                        'message'   => 'Err',
+                        'errors'    => $error->getMessage(),
+                    ],
+                    500
+                );
+        }
     }
 
     public function login(Request $request)
     {
-        try 
-        {
-            if (!Auth::attempt($request->only('email', 'password')))
-            {
+        try {
+            if (!Auth::attempt($request->only('email', 'password'))) {
                 return response()
                     ->json(
                         [
                             'message' => 'Unauthorized'
-                        ], 
-                    401);
+                        ],
+                        401
+                    );
             }
 
             auth()->user()->tokens()->delete();
 
             $user = User::where('email', $request['email'])->firstOrFail();
 
+            if ($request->input('fcm_token')) {
+                $cek_token =  User::where('fcm_token', $request->input('fcm_token'))->first();
+
+                if ($cek_token) {
+                    User::where('id', $cek_token->id)->update('fcm_token', NULL);
+
+                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                } else {
+                    User::where('id', $user->id)->update('fcm_token', $request->input('fcm_token'));
+                }
+            }
+
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()
                 ->json(
                     [
-                        'message'       => 'Hi '.$user->name.', welcome to home',
+                        'message'       => 'Hi ' . $user->name . ', welcome to home',
                         'data'          => $user,
                         'access_token'  => $token,
-                        'token_type'    => 'Bearer', 
+                        'token_type'    => 'Bearer',
                     ],
-                200);
-        }
-
-        catch (\Exception $error)
-        {
+                    200
+                );
+        } catch (\Exception $error) {
             return response()
-            ->json(
-                [
-                    'message'   => 'Err',
-                    'errors'    => $error->getMessage(),
-                ],
-            500);
-        }   
+                ->json(
+                    [
+                        'message'   => 'Err',
+                        'errors'    => $error->getMessage(),
+                    ],
+                    500
+                );
+        }
     }
 
     // Forgot Password
@@ -154,7 +173,7 @@ class AuthController extends Controller
         User::where('email', $request->email)
             ->update(['password' => Hash::make($request->password)]);
 
-        
+
 
         return response()
             ->json(
@@ -169,7 +188,7 @@ class AuthController extends Controller
     // method for user logout and delete token
     public function logout()
     {
-        
+
         auth()->user()->tokens()->delete();
 
         return [
